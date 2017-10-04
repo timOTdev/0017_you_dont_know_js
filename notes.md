@@ -161,11 +161,281 @@ outer();
     }
 	calculate();    
     ```      
+      
+    - The book's solution:
+    ```
+    const SPENDING_THRESHOLD = 200;
+    const TAX_RATE = 0.08;
+    const PHONE_PRICE = 99.99;
+    const ACCESSORY_PRICE = 9.99;
 
+    var bank_balance = 303.91;
+    var amount = 0;
+
+    function calculateTax(amount) {
+        return amount * TAX_RATE;
+    }
+
+    function formatAmount(amount) {
+        return "$" + amount.toFixed(2);
+    }
+
+    // keep buying phones while you still have money
+    while (amount < bank_balance) {
+        // buy a new phone!
+        amount = amount + PHONE_PRICE;
+
+        // can we afford the accessory?
+        if (amount < SPENDING_THRESHOLD) {
+            amount = amount + ACCESSORY_PRICE;
+        }
+    }
+
+    // don't forget to pay the government, too
+    amount = amount + calculateTax(amount);
+
+    console.log("Your purchase: " + formatAmount(amount)); // Your purchase: $334.76
+
+    // can you actually afford this purchase?
+    if (amount > bank_balance) {
+        console.log(
+            "You can't afford this purchase. :("
+        );
+    } // You can't afford this purchase. :()
+    ```
+      
+    - Review
+        - You need *operators* to perform actions on.
+        - You need *values* and *types* to perform different kinds of actions like math on **numbers** or output with **strings**.
+        - You need *variables* to store data (aka *state*) during your program's execution.
+        - You need conditionals like **if** statements to make decisions
+        - You need *loops* to repeate tasks until a condition stops being true.
+        - You need *functions* to organize your code into logical and reusable chunks
 ### [Chapter 2: Into JavaScript](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch2.md)
 - Values & Types
+    - Use typeof to determine the type of value of the variable
+    ```
+    var a = 'Hello';
+    typeof a; // string
+
+    // Note that typeof null is and object, weird!
+    ```
+      
+- Objects
+    - Useful to store lots of information
+    - can be accessed with *dot notation* (ie obj.a) or *bracket notation* (ie obj["a"])
+    ```
+    var obj = {
+        a: "hello world",
+        b: 42,
+        c: true
+    };
+
+    obj.a; // "hello world"
+    obj.b; // 42
+    obj.c; // true
+
+    obj["a"] // "hello world"
+    obj["b"] // 42
+    obj["c"] // true
+    ```
+      
+    - However, bracket notation is useful for key/value pairs
+    ```
+    var obj = {
+        a: "hello world",
+        b: 42
+    };
+
+    var b = "a";
+
+    obj[b]; // "hello world"
+    ojb["b"]; // 42
+    ``` 
+      
+    - arrays and functions are thought of as subtypes of object
+      
+    - **Arrays**
+    - Holds values which are indexed by position and not by key/value pairs
+    - Best approach is to use arrays for numerically positioned values and use objects for named properties
+    ```
+    var arr = ]
+        "hello world",
+        42,
+        true
+    ];
+
+    arr[0]; // "hello world"
+    arr[1]; // 42
+    arr[2]; // true
+    arr.length; // 3
+
+    typeof arr; // "object"
+    ```
+      
+    - **Functions**
+    - Are objects but typeof will return "function"
+    - It can also have properties like how you would only use foo.bar in limited cases
+    ``
+    function foo() {
+        return 42;
+    }
+
+    foo.bar = "hello world";
+
+    typeof foo; // "function"
+    typeof foo(); // "number"
+    typeof foo.bar; // "string"
+    ``
+      
+    - **Built-In Type Methods**
+    - There are under the hood methods that we don't need to worry about
+    - Just know that they are there
+    ```
+    var a = "hello world";
+    var b = 3.14159;
+
+    a.length; // 11
+    a.toUpperCase(); // "HELLO WORLD"
+    b.toFixed(4); // "3.1416"
+    ```
+      
+    - **Comparing Values**
+    - Coercion
+        - Types can be explicitly and implicitly coerced
+        - A string like "42" can be coerced using Number(), explicit coercion
+        - A string like "42" can be multiplied by another which forces "42" to be coerced into a number, implicit coercion
+      
+    - Truthy & falsy
+        - A non-boolean value only follows this list if forcibly coerced into a boolean value
+        - Falsy list:
+        1. "" (empty string)
+        2. 0, -0, NaN (invalid number)
+        3. null, undefined
+        4. false
+        - Truthy list:
+        1. "hello"
+        2. 42
+        3. true
+        4. [], [1, "2", 3] (arrays)
+        5. {}, {a: 42} (objects)
+        6. functions foo() {..} (functions)
+
+        - **Equality**
+        - == checks for value equality with coercion allowed
+        - === checks for value equality without allowing coercion (aka strict equality)
+        - Many programmers swear by === but == can be useful as well
+        - Bang operator (!) means not
+        - != pairs with ==
+        - !== pairs with ===
+        ```
+        var a = "42";
+        var b = 42;
+
+        a == b; // true
+        a === b; // false
+        ```
+        - Arrays are coered to strings by default!
+        ```
+        var a = [1,2,3];
+        var b = [1,2,3];
+        var c = "1,2,3";
+
+        a == c; // true
+        b == c; // true
+        a == b; // false
+        ```
+          
+        - **Inequality**
+        - We can compare numbers and strings also
+        - There is no strict equality here (===)
+        - In example 1, b < c is true because rule is with 2 strings that it follows alphabetically
+        ```
+        var a = 41;
+        var b = "42"'
+        var c = "43";
+
+        a < b; // true
+        b < c; // true
+        ```
+        - But when we compare a string and number, the string is coerced into a NaN
+        ```
+        var a = 42;
+        var b = "foo";
+
+        a < b; // false
+        a > b; // false
+        a == b; // false
+        ```
 - Variables
+    - Can be a-z, A-Z, $, 0-9, or _.
+    - "Reserved words" can be used as property names but not variables
+    1. JS keywords (for, in, if, etc.)
+    2. null
+    3. true
+    4. false
+      
+    - **Function Scopes**
+    - Use var to declare a variable
+
+    - **Hoisting**
+    - When a var is conceptually "moved" to the top of its enclosing scope
+    - It is good practice to use hoisted function declarations to appear before its formal declaration
+    ```
+    var a = 2;
+
+    foo();  // works because foo() declaration is "hoisted"
+
+    function foo() {
+        a = 3;
+        console.log(a); //3
+        var a;  // declaration is "hoisted" to the top of foo()
+    }
+
+    console.log(a); // 2 
+    ```
+      
+    **Nested Scope**
+    - You can only access variables nested a function but outside of the function, the variable can't be accessed
+    - Always declare your variables formally with var or let, or else it might become top-level scoped variable
+    - In ES6, let keyword belongs only to that individual code block
+    ```
+    function foo() {
+        var a = 1;
+
+        if (a >= 1) {
+            let b = 2; // b belongs only to the if code block
+
+            while (b < 5) {
+                let c = b * 2; // c belongs only to the while code block
+                b++;
+
+                console.log(a + c);
+            })
+        }
+    }
+
+    foo();
+    // 5 7 9
+    ```
 - Conditionals
+    - Use the if...else if...else to specify conditions
+    - Switch is also available but make sure to use break statement
+    - Otherwise, the "fall through will continue to the next case's statement
+    - The "conditional operator" (aka ternary operator) is more concise if..else
+    - The most common usage with assignment, but not the only case
+    ```
+    var a = 42;
+    var b = (a > 41) ? "hello" : "world";
+
+    // similar to:
+
+    // if (a > 41) {
+    //    b = "hello";
+    // } else {
+    //    b = "world";
+    // }
+    ```
 - Strict Mode
 - Functions As Values
 - this Keyword
