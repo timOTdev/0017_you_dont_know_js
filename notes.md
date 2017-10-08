@@ -258,34 +258,9 @@ if (amount > bank_balance) {
 ## Review
 - You need *operators* to perform actions on.
 - You need *values* and *types* to perform different kinds of actions like math on **numbers** or output with **strings**.
-var a = 42;
-
-(function IIFE(){
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-})
-- You need *variabl
-s* to store data (aka *state*) during your program's execution.
+- You need *variables* to store data (aka *state*) during your program's execution.
 - You need conditionals like **if** statements to make decisions
-- You need *loops* to repeate tasks until a condition stops being true.
+- You need *loops* to repeat tasks until a condition stops being true.
 - You need *functions* to organize your code into logical and reusable chunks
 
 # [Chapter 2: Into JavaScript](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch2.md)
@@ -542,7 +517,7 @@ var foo = function() {  // An anonymous function
     // ..
 }
 
-var x = function() {    // A named function
+var x = function bar() {    // A named function
     // ..
 }
 ```
@@ -655,8 +630,89 @@ new foo();      // undefined
 - `this` in foo() refers to the global object window in non-strict mode, would be undefined in strict mode
 - Literally, `this.bar` means `window.bar`
 ## Prototypes
+- This concept is quite complicated but visited in chapter 4-6 of this & Object Prototypes
+- Basically, it is a fallback for when a property doesn't exist when you try to reference it
+- JS will automatically look at that object's internal prototype reference to find another object to find it
+- This internal reference is created at the time the object is created
+```js
+var foo = {
+    a: 42
+}
+
+// create `bar` and link it to `foo`
+var bar = Object.create(foo);
+
+bar.b = "hello world";
+
+bar.b; // "hello world"
+bar.a;  // 42 <-- delegated to `foo`
+```
+- The most common way this feature is used is to try to emulate/fake a "class" mechanism with "inheritance"
+- Another popular pattern is "behavior delegation"
+- You intentionally link objects to be able to delegate from one to the other for parts of the needed behavior
+
 ## Old & New
+- How do we implement new JS technology to older browsers?
+- We can use polyfilling and transpiling
+
+### Polyfilling
+- Definition: To take the definition of a newer feature and produce a piece of code that's equivalent to the behavior, but is able to run in older JS environments
+- Number.isNaN(..) is a utility to provide an accurate, non-buggy check for NaN values, deprecating original isNaN(..)
+```js
+if (!Number.isNan) {
+    Number.isNaN = function isNaN(x) {
+        return x !== x;
+    };
+}
+```
+- The if statement here guards for ES6 browsers
+- NaN is a value that is never equal to itself so it is the only that makes x !== x out to be true
+- Not all features are fully polyfillable
+- There are small deviations
+- You have to be realy careful with adhering to specifications when implementing a polyfill yourself
+- A good source to get polyfills: [ES5-Shim](https://github.com/es-shims/es5-shim) and [ES6-Shim](https://github.com/paulmillr/es6-shim)
+
+### Transpiling
+- Definition: A tool that converts your newer code into older code equivalents. A creation from transforming + compiling
+- You generally insert it into your build process along with like a coe linter or minifier
+  
+- Why write new code to transpile to old one anyways?
+1. New code is more readable and maintainable
+2. New code takes advantage of browser performance optimizations
+3. New code provides earlier feedback for new syntax for the JavaScript committee to fix issues
+  
+- An example of transpiling from an ES6 feature to older environments:
+```js
+function foo(a = 2) {
+    console.log(a);
+}
+
+foo();      // 2
+foo(42);    //42
+```
+- transpiles to:
+```js
+function foo() {
+    var a = arguments[0] !== (void 0) ? arguments[0] : 2;
+    console.log(a);
+}
+```
+- Transpilers are now the standard part of JS development ecosystem and process
+- Two great transpilers to choose from:
+1. [Bable](https://babeljs.io/repl/) - Transpiles ES6+ into ES5
+2. [Traceur](https://github.com/google/traceur-compiler) - Transpiles ES6, ES7, and beyond into ES5
+
 ## Non-JavaScript
+- The most common non-JavaScript JavaScript you'll encounter is the DOM API 
+- It provides a document variable that contains special methods like `getElementById(..)`, `input/output`, `alert(..)`, `console.log(..)`
+```js
+var el = document.getElementById("foo");
+```
+
+## Review
+- Most of the concepts here were covered only on the surface
+- This series will delve deeper into the language of JS
+
 # [Chapter 3: Into YDKJS](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch3.md)
 ## Scope & Closures
 ## this & Object Prototypes
