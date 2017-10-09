@@ -629,6 +629,8 @@ new foo();      // undefined
 ```
 - `this` in foo() refers to the global object window in non-strict mode, would be undefined in strict mode
 - Literally, `this.bar` means `window.bar`
+- Notice that obj1 is an object and this would refer to obj1 object and not the window object
+
 ## Prototypes
 - This concept is quite complicated but visited in chapter 4-6 of this & Object Prototypes
 - Basically, it is a fallback for when a property doesn't exist when you try to reference it
@@ -669,12 +671,12 @@ if (!Number.isNan) {
 - NaN is a value that is never equal to itself so it is the only that makes x !== x out to be true
 - Not all features are fully polyfillable
 - There are small deviations
-- You have to be realy careful with adhering to specifications when implementing a polyfill yourself
+- You have to be really careful with adhering to specifications when implementing a polyfill yourself
 - A good source to get polyfills: [ES5-Shim](https://github.com/es-shims/es5-shim) and [ES6-Shim](https://github.com/paulmillr/es6-shim)
 
 ### Transpiling
 - Definition: A tool that converts your newer code into older code equivalents. A creation from transforming + compiling
-- You generally insert it into your build process along with like a coe linter or minifier
+- You generally insert it into your build process along with like a code linter or minifier
   
 - Why write new code to transpile to old one anyways?
 1. New code is more readable and maintainable
@@ -715,8 +717,51 @@ var el = document.getElementById("foo");
 
 # [Chapter 3: Into YDKJS](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/ch3.md)
 ## Scope & Closures
+- JavaScript is a language that is compiled right before it is run or even during
+- We need to understand how it interprets code based on scope
+- Closures are a key fundamental concept and prevalently used with the module pattern
+
 ## this & Object Prototypes
+- A common misconception is "this" refers to the function it is in
+- "this" keyword is a dynamically bound keyword based on how the function is executed
+- There are 4 simple rules to understand the keyword
+  
+- Object prototypes looks up chains for properties and closely related to "this" keyword
+- A common misconception is that it is used to emulate "fake" classes and (so called "prototypal") inheritance
+- A common issue related to this is "behavior delegation"
+
 ## Types & Grammar
+- Many complaints are about type coercion and implicit coercion
+- As most people are confused as to how it works
+
 ## Async & Performance
+- Asynchrony helps the performance of our application and the critical factor for writability and maintainability
+- We will see that callbacks are no longer sufficient in modern demands
+- There are 2 major deficiencies of callback coding: Inversion of Control trust lost and lack of linear reason-ability
+- Now we looks towards promises and generators
+- Promises are a time-independent wrapper around a "future value," which lets you reason about and compose them regardless of if the value is ready or not yet
+- Generators are a new most of execution for JS functions which can pause at yield points and be resumed asynchornously later
+- It makes our synchronous  code to be processed asynchronously behind the scenes
+- Much of the ES7 will be using these two foundations in the technology
+### Other optimizations in the future
+- Program parallelism with Web Workers
+- Data parallelism with SIMD
+- Low-level optimization techniques like ASM.js
+
 ## ES6 & Beyond
+- ES6 offers many new features like:
+1. Destructuring
+2. Default parameter values,
+3. Symbols
+4. Concise methods
+5. Computed properties
+6. Arrow functions
+7. Block scoping
+8. Promises
+9. Generators
+10. Iterators
+11. Modules
+12. Proxies
+13. Weakmaps
+
 # [Appendix A: Thank You's!](https://github.com/getify/You-Dont-Know-JS/blob/master/up%20%26%20going/apA.md)
