@@ -1,4 +1,4 @@
-# [ydkjs-1](notes.md)
+# [0017_you_dont_know_js](notes.md)
 myCourses > My codebase for book (Kyle Simpson)
 - Foreword
 - Preface
